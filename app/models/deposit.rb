@@ -90,6 +90,12 @@ class Deposit < ApplicationRecord
         record_complete_operations!
       end
     end
+
+    event :refund do
+      transitions from: %i[aml_suspicious skipped], to: :refunding do
+        guard { coin? }
+      end
+    end
   end
 
   def aml_check!
